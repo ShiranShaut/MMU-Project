@@ -1,0 +1,42 @@
+package com.hit.memory;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.io.*;
+import com.hit.dm.*;
+import com.hit.algorithm.*;
+import com.hit.dao.IDao;
+
+public class CacheUnit<T> {
+
+	private IAlgoCache<Long, DataModel<T>> algoCache;
+	private IDao<Long, DataModel<T>> dao;
+	public static Integer numberOfSwaps = 0;
+	
+	public CacheUnit(IAlgoCache<Long, DataModel<T>> algo, IDao<Long, DataModel<T>> dao) {
+		algoCache = algo;
+		this.dao = dao;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public DataModel<T>[] getDataModels(Long[] ids) throws ClassNotFoundException, IOException {
+
+		List<DataModel<T>> dataModels = new ArrayList<DataModel<T>>();
+
+		for (Long id : ids) {
+			DataModel<T> dataAboutId = algoCache.getElement(id);
+
+			if (dataAboutId == null) {
+				dataAboutId = dao.find(id);
+				if(algoCache.isFull()) {
+					numberOfSwaps++;
+				}
+				algoCache.putElement(id, dataAboutId);
+			}
+
+			dataModels.add(dataAboutId);
+		}
+
+		return (DataModel<T>[]) dataModels.toArray(new Object[dataModels.size()]);
+	}
+}

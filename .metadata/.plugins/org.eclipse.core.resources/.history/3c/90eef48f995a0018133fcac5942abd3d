@@ -1,0 +1,109 @@
+package com.hit.view;
+
+import java.util.Observable;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+public class CacheUnitView extends Observable implements View {
+
+	CachUnitPanel cacheUnitPanel; 
+	
+	public void Start() {
+			javax.swing.SwingUtilities.invokeLater(new Runnable() {
+				public void run() {
+					createAndShowGUI();
+				}
+			});
+	}
+
+	private void createAndShowGUI() {
+		
+		JFrame frame = new JFrame("Java Project - Shiran Shaut_308018969");
+		cacheUnitPanel = new CachUnitPanel();
+		
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.getContentPane().add(cacheUnitPanel);
+		frame.pack();
+		frame.setVisible(true);
+	}
+
+	@Override
+	public <T> void updateUIData(T t) {
+		
+	}
+	
+	@SuppressWarnings("serial")
+	public class CachUnitPanel extends JPanel implements ActionListener {
+
+		JButton loadRequestButton;
+		JButton showStatisticsButton;
+		
+		JLabel capacityLabel;
+		JLabel algorithmLabel;
+		JLabel numberOfRequestsLabel;
+		JLabel numberOfDMRequestsLabel;
+		JLabel numberOfDMSwapsLabel;
+		
+		JLabel capacityLabelNumber;
+		JLabel algorithmLabelNumber;
+		JLabel numberOfRequestsLabelNumber;
+		JLabel numberOfDMRequestsLabelNumber;
+		JLabel numberOfDMSwapsLabelNumber;
+		
+		public CachUnitPanel() {
+			loadRequestButton = new JButton("Load a Request");
+			showStatisticsButton = new JButton("Show Statistics");
+			
+			capacityLabel = new JLabel("Capacity: ");
+			algorithmLabel = new JLabel("Algorithm: ");
+			numberOfRequestsLabel = new JLabel("Total number of requests: ");
+			numberOfDMRequestsLabel = new JLabel("Total number of DataModels (GET/DELETE/UPDATE requests): ");
+			numberOfDMSwapsLabel = new JLabel("Total number of DataModels swaps (from Cache to Disk): ");
+			
+			capacityLabelNumber = new JLabel("0");
+			algorithmLabelNumber = new JLabel("0");
+			numberOfRequestsLabelNumber = new JLabel("0");
+			numberOfDMRequestsLabelNumber = new JLabel("0");
+			numberOfDMSwapsLabelNumber = new JLabel("0");
+			
+			add(loadRequestButton);
+			add(showStatisticsButton);
+			
+			add(capacityLabel);
+			add(algorithmLabel);
+			add(numberOfRequestsLabel);
+			add(numberOfDMRequestsLabel);
+			add(numberOfDMSwapsLabel);
+			
+			add(capacityLabelNumber);
+			add(algorithmLabelNumber);
+			add(numberOfRequestsLabelNumber);
+			add(numberOfDMRequestsLabelNumber);
+			add(numberOfDMSwapsLabelNumber);
+			
+			loadRequestButton.setActionCommand("loadRequestButton");
+			showStatisticsButton.setActionCommand("showStatisticsButton");
+			
+			loadRequestButton.addActionListener(this);
+			showStatisticsButton.addActionListener(this);
+		}
+		
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			if("showStatisticsButton".equals(e.getActionCommand())) {
+				setChanged();
+				notifyObservers();	
+			}
+			else if("loadRequestButton".equals(e.getActionCommand())) {
+				setChanged();
+				notifyObservers();	
+			}
+		}
+	}
+	
+}

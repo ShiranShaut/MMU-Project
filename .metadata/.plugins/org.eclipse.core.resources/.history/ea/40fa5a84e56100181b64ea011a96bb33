@@ -1,0 +1,48 @@
+package com.hit.memory;
+
+import java.io.IOException;
+import org.junit.Assert;
+import org.junit.Test;
+import com.hit.algorithm.IAlgoCache;
+import com.hit.algorithm.LRUAlgoCacheImpl;
+import com.hit.dao.DaoFileImpl;
+import com.hit.dao.IDao;
+import com.hit.dm.DataModel;
+
+public class CacheUnitTest {
+
+	@Test
+	public void getDataModelsTest() {
+		
+	    IAlgoCache<Long, DataModel<String>> algo = new LRUAlgoCacheImpl<>(5);
+	    IDao<Long, DataModel<String>> dao = new DaoFileImpl<>("src\\main\\resources\\datasource.txt");
+	    CacheUnit<String> cacheUnit = new CacheUnit<>(algo, dao);
+	    
+	    Long[] ids = { (long)1, (long)2, (long)3, (long)4, (long)5 };
+	    DataModel<String> data1 = new DataModel<String>((long)1, "1");
+	    DataModel<String> data2 = new DataModel<String>((long)2, "2");
+	    DataModel<String> data3 = new DataModel<String>((long)3, "3");
+	    DataModel<String> data4 = new DataModel<String>((long)4, "4");
+	    DataModel<String> data5 = new DataModel<String>((long)5, "5");
+	    DataModel<String> data6 = new DataModel<String>((long)6, "6");
+	    
+	    algo.putElement(ids[0], data1);
+	    algo.putElement(ids[1], data2);
+	    algo.putElement(ids[2], data3);
+	    algo.putElement(ids[3], data4);
+	    algo.putElement(ids[4], data5);
+	    
+	    try {
+			DataModel<String>[] dataModelArr = cacheUnit.getDataModels(ids);
+			Assert.assertEquals(data1.getContent(), dataModelArr[0].getContent());
+			Assert.assertEquals(data2.getContent(), dataModelArr[1].getContent());
+			Assert.assertEquals(data3.getContent(), dataModelArr[2].getContent());
+			Assert.assertEquals(data4.getContent(), dataModelArr[3].getContent());
+			Assert.assertEquals(data5.getContent(), dataModelArr[4].getContent());
+			Assert.assertEquals("null", dataModelArr[5].getContent());
+			
+		} catch (ClassNotFoundException | IOException e) {
+			e.printStackTrace();
+		}
+	}
+}

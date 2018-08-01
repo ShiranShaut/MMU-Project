@@ -1,0 +1,75 @@
+package com.hit.server;
+
+import java.io.IOException;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.util.Observable;
+import java.util.Observer;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
+
+import com.hit.services.CacheUnitController;
+import com.hit.util.CLI;
+
+public class Server implements Observer {
+	
+	public static final int SIZE = 10;
+	private int port;
+	private ServerSocket serverSocket;
+	private static boolean serverOn = false;
+	public static Integer numberOfRequests = 0;
+	
+	public Server() {
+		port = 12345;
+		
+		try {
+			serverSocket = new ServerSocket(port);
+			serverOn = true;
+		}
+		catch(IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	void start() {
+		try {
+			Executor executor = Executors.newFixedThreadPool(SIZE);
+			
+			while(serverOn) {
+				Socket socket = serverSocket.accept();
+				numberOfRequests++;				
+				HandleRequest<String> handler = new HandleRequest<String>(socket, new CacheUnitController<String>());
+				executor.execute(new Thread(handler));
+			}
+		} catch (IOException e) {
+			if(!serverOn)
+				System.out.println("Server is Close");
+			else
+				System.out.println("Server Error");
+		} finally {
+			try {
+				if(serverSocket != null && !serverSocket.isClosed()) {
+					serverSocket.close();
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	@Override
+	public void update(Observable o, Object arg) {
+		
+		String command = arg.toString();
+		switch(command) {
+		case CLI.START: {
+			start();
+			break;
+		}
+		case CLI.STOP: {
+			serverOn = false;
+			break;
+		}
+		}
+	}
+}

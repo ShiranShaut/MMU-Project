@@ -1,0 +1,64 @@
+package com.hit.view;
+
+import java.util.Observable;
+
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+public class CacheUnitView extends Observable implements View {
+
+	@Override
+	public void start() {
+		
+	}
+
+	@Override
+	public <T> void updateUIData(T t) {
+		
+	}
+	
+	@SuppressWarnings("serial")
+	public class CachUnitPanel extends JPanel implements ActionListener {
+
+		JButton loadRequestButton;
+		JButton showStatisticsButton;
+		JLabel capacityLabel;
+		JLabel algorithmLabel;
+		JLabel numberOfRequestsLabel;
+		JLabel numberOfDMRequestsLabel;
+		JLabel numberOfDMSwapsLabel;
+		
+		public CachUnitPanel() {
+			loadRequestButton = new JButton("Load a Request");
+			showStatisticsButton = new JButton("Show Statistics");
+			capacityLabel = new JLabel("Capacity: ");
+			algorithmLabel = new JLabel("Algorithm: ");
+			numberOfRequestsLabel = new JLabel("Total number of requests: ");
+			numberOfDMRequestsLabel = new JLabel("Total number of DataModels (GET/DELETE/UPDATE requests): ");
+			numberOfDMSwapsLabel = new JLabel("Total number of DataModels swaps (from Cache to Disk): ");
+			
+			add(loadRequestButton);
+			add(showStatisticsButton);
+			loadRequestButton.setActionCommand("loadRequestButton");
+			showStatisticsButton.setActionCommand("showStatisticsButton");
+			loadRequestButton.addActionListener(this);
+			showStatisticsButton.addActionListener(this);
+		}
+		
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			if("showStatisticsButton".equals(e.getActionCommand())) {
+				setChanged();
+				notifyObservers();	
+			}
+			else if("loadRequestButton".equals(e.getActionCommand())) {
+				setChanged();
+				notifyObservers();	
+			}
+		}
+	}
+	
+}

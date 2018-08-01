@@ -1,0 +1,16 @@
+package com.hit.model;
+
+import java.util.Observable;
+
+public class CacheUnitModel extends Observable implements Model {
+	
+	CacheUnitClient chachUnitClient = new CacheUnitClient();
+	
+	public CacheUnitModel() {
+		
+	}
+	
+	public <T> void updateModelData(T t) {
+		chachUnitClient.send(t.toString()); // ?
+	}
+}

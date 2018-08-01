@@ -1,0 +1,172 @@
+package com.hit.view;
+
+import java.util.Observable;
+
+import javax.swing.JButton;
+import javax.swing.JFileChooser;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+public class CacheUnitView extends Observable implements View {
+
+	CachUnitPanel cacheUnitPanel; 
+	
+	@Override
+	public void start() {
+		javax.swing.SwingUtilities.invokeLater(new Runnable() {
+			public void run() {
+				createAndShowGUI();
+			}
+		});
+	}
+
+	private void createAndShowGUI() {
+		JFrame frame = new JFrame("Java Project - Shiran Shaut_308018969");
+		cacheUnitPanel = new CachUnitPanel();
+		
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.getContentPane().add(cacheUnitPanel);
+		frame.pack();
+		frame.setVisible(true);
+	}
+
+	@Override
+	public <T> void updateUIData(T t) {
+		
+	}
+	
+	@SuppressWarnings("serial")
+	public class CachUnitPanel extends JPanel implements ActionListener {
+
+		JButton loadRequestButton;
+		JButton showStatisticsButton;
+		
+		JLabel capacityLabel;
+		JLabel algorithmLabel;
+		JLabel numberOfRequestsLabel;
+		JLabel numberOfDMRequestsLabel;
+		JLabel numberOfDMSwapsLabel;
+		
+		JLabel capacityLabelNumber;
+		JLabel algorithmLabelNumber;
+		JLabel numberOfRequestsLabelNumber;
+		JLabel numberOfDMRequestsLabelNumber;
+		JLabel numberOfDMSwapsLabelNumber;
+		
+		public CachUnitPanel() {
+			this.setSize(300, 200);
+			
+			loadRequestButton = new JButton("Load a Request");
+			showStatisticsButton = new JButton("Show Statistics");
+			
+			capacityLabel = new JLabel("Capacity: ");
+			algorithmLabel = new JLabel("Algorithm: ");
+			numberOfRequestsLabel = new JLabel("Total number of requests: ");
+			numberOfDMRequestsLabel = new JLabel("Total number of DataModels (GET/DELETE/UPDATE requests): ");
+			numberOfDMSwapsLabel = new JLabel("Total number of DataModels swaps (from Cache to Disk): ");
+			
+			capacityLabelNumber = new JLabel("0");
+			algorithmLabelNumber = new JLabel("UNKNOWN");
+			numberOfRequestsLabelNumber = new JLabel("0");
+			numberOfDMRequestsLabelNumber = new JLabel("0");
+			numberOfDMSwapsLabelNumber = new JLabel("0");
+			
+			loadRequestButton.setBounds(20,20,100,100);
+			showStatisticsButton.setBounds((int)(loadRequestButton.getWidth() + loadRequestButton.location().getX() + 10), 20 ,100, 100);
+			
+			capacityLabel.setBounds(5, (int)(loadRequestButton.getHeight() + loadRequestButton.location().getY() + 10), 50, 50);
+			capacityLabelNumber.setBounds((int) (capacityLabel.getWidth() + capacityLabel.getLocation().getX() + 5), (int)(loadRequestButton.getHeight() + loadRequestButton.location().getY() + 10), 50, 50);
+			
+			algorithmLabel.setBounds(5, (int)(capacityLabel.getHeight() + capacityLabel.location().getY() + 10), 50, 50);
+			algorithmLabelNumber.setBounds((int) (algorithmLabel.getWidth() + algorithmLabel.getLocation().getX() + 5), (int)(capacityLabel.getHeight() + capacityLabel.location().getY() + 10), 50, 50);
+			
+			numberOfRequestsLabel.setBounds(5, (int)(algorithmLabel.getHeight() + algorithmLabel.location().getY() + 10), 50, 50);
+			numberOfRequestsLabelNumber.setBounds((int) (numberOfRequestsLabel.getWidth() + numberOfRequestsLabel.getLocation().getX() + 5), (int)(algorithmLabel.getHeight() + algorithmLabel.location().getY() + 10), 50, 50);
+			
+			numberOfDMRequestsLabel.setBounds(5, (int)(numberOfRequestsLabel.getHeight() + numberOfRequestsLabel.location().getY() + 10), 50, 50);
+			numberOfDMRequestsLabelNumber.setBounds((int) (numberOfDMRequestsLabel.getWidth() + numberOfDMRequestsLabel.getLocation().getX() + 5), (int)(numberOfRequestsLabel.getHeight() + numberOfRequestsLabel.location().getY() + 10), 50, 50);
+			
+			numberOfDMSwapsLabel.setBounds(5, (int)(numberOfDMRequestsLabel.getHeight() + numberOfDMRequestsLabel.location().getY() + 10), 50, 50);
+			numberOfDMSwapsLabelNumber.setBounds((int) (numberOfDMSwapsLabel.getWidth() + numberOfDMSwapsLabel.getLocation().getX() + 5), (int)(numberOfDMRequestsLabel.getHeight() + numberOfDMRequestsLabel.location().getY() + 10), 50, 50);
+			
+			add(loadRequestButton);
+			add(showStatisticsButton);
+			
+			add(capacityLabel);
+			add(capacityLabelNumber);
+			
+			add(algorithmLabel);
+			add(algorithmLabelNumber);
+			
+			add(numberOfRequestsLabel);
+			add(numberOfRequestsLabelNumber);
+			
+			add(numberOfDMRequestsLabel);
+			add(numberOfDMRequestsLabelNumber);
+			
+			add(numberOfDMSwapsLabel);
+			add(numberOfDMSwapsLabelNumber);
+			
+			loadRequestButton.setActionCommand("loadRequestButton");
+			showStatisticsButton.setActionCommand("showStatisticsButton");
+			
+			loadRequestButton.addActionListener(this);
+			showStatisticsButton.addActionListener(this);
+		}
+		
+		public void increaseCapacityLabelNumber() {
+			Integer num = Integer.parseInt(capacityLabelNumber.getText());
+			num++;
+			capacityLabelNumber.setText(num.toString());
+		}
+		
+		public void setAlgorithmLabel(String chosenAlgo) {
+			algorithmLabelNumber.setText(chosenAlgo);
+		}
+		
+		public void increaseNumberOfRequestsLabelNumber() {
+			Integer num = Integer.parseInt(numberOfRequestsLabelNumber.getText());
+			num++;
+			numberOfRequestsLabelNumber.setText(num.toString());
+		}
+		
+		public void increaseNumberOfDMRequestsLabelNumber() {
+			Integer num = Integer.parseInt(numberOfDMRequestsLabelNumber.getText());
+			num++;
+			numberOfDMRequestsLabelNumber.setText(num.toString());
+		}
+		
+		public void increaseNumberOfDMSwapsLabelNumber() {
+			Integer num = Integer.parseInt(numberOfDMSwapsLabelNumber.getText());
+			num++;
+			numberOfDMSwapsLabelNumber.setText(num.toString());
+		}
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			if("showStatisticsButton".equals(e.getActionCommand())) {
+				setChanged();
+				notifyObservers("showStatisticsButton");	
+			}
+			else if("loadRequestButton".equals(e.getActionCommand())) {
+				JFileChooser fileChooser = new JFileChooser();
+				int val = fileChooser.showOpenDialog(CachUnitPanel.this);
+				
+				if(val == JFileChooser.APPROVE_OPTION) {
+					String fileName = fileChooser.getSelectedFile().getName();
+					
+					if(fileName != null) {
+					System.out.println("Load File Succeeded");
+					setChanged();
+					notifyObservers(fileName);
+					}
+				} else {
+					System.out.println("Load File Failed");
+				}
+			}
+		}
+	}
+}

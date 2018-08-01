@@ -1,0 +1,78 @@
+package com.hit.services;
+
+import java.io.IOException;
+import com.hit.dm.DataModel;
+import com.hit.memory.CacheUnit;
+
+public class CacheUnitService<T> {
+
+	@SuppressWarnings("rawtypes")
+	private CacheUnit cacheUnit;
+	public static int numberOfGUDRequests = 0;
+	
+	boolean	delete(DataModel<T>[] dataModels) {
+		numberOfGUDRequests++;	
+		DataModel<T>[] models = get(dataModels);
+		
+		if(models == null) {
+			return false;
+		}
+		
+		for (DataModel<T> dataModel1 : models) {
+			for (DataModel<T> dataModel2 : dataModels) {
+				if(dataModel1.equals(dataModel2)) {
+					dataModel1.setContent(null);
+					break;
+				}
+			}
+		}
+		
+		return true;
+	}
+	
+	@SuppressWarnings({ "unchecked", "finally" })
+	DataModel<T>[] get(DataModel<T>[] dataModels) {
+		numberOfGUDRequests++;	
+		DataModel<T>[] models = null;
+
+		try {
+			Long[] ids = getIds(dataModels);
+			models = cacheUnit.getDataModels(ids);
+
+		} catch (ClassNotFoundException | IOException e) {
+			e.printStackTrace();
+		} finally {
+			return models;
+		}
+	}
+	
+	boolean	update(DataModel<T>[] dataModels) {
+		numberOfGUDRequests++;	
+		DataModel<T>[] models = get(dataModels);
+		
+		if(models == null) {
+			return false;
+		}
+		
+		for (DataModel<T> dataModel1 : models) {
+			for (DataModel<T> dataModel2 : dataModels) {
+				if((dataModel1.getDataModelId()).equals(dataModel2.getDataModelId())) {
+					dataModel1.setContent(dataModel1.getContent());
+					break;
+				}
+			}
+		}
+		
+		return true;
+	}
+	
+	private Long[] getIds(DataModel<T>[] dataModels) {
+		Long[] ids = new Long[dataModels.length];
+		
+		for (int i=0; i<dataModels.length; ++i) {
+			ids[i] = dataModels[i].getDataModelId();
+		}
+		
+		return ids;
+	}
+}

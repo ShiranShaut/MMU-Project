@@ -1,0 +1,4 @@
+1527324556371	Rename field 'numberOfRequests'
+1527332739600	Extract method 'getAlgoNameFromUser'
+1527332788938	Extract method 'getCapacityFromUser'
+1527346948548	Rename field 'id'

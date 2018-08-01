@@ -1,0 +1,163 @@
+package com.hit.view;
+
+import java.util.Observable;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+public class CacheUnitView extends Observable implements View {
+
+	CachUnitPanel cacheUnitPanel; 
+	
+	@Override
+	public void start() {
+		javax.swing.SwingUtilities.invokeLater(new Runnable() {
+			public void run() {
+				createAndShowGUI();
+			}
+		});
+	}
+
+	private void createAndShowGUI() {
+		JFrame frame = new JFrame("Java Project - Shiran Shaut_308018969");
+		cacheUnitPanel = new CachUnitPanel();
+		
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.getContentPane().add(cacheUnitPanel);
+		frame.pack();
+		frame.setVisible(true);
+	}
+
+	@Override
+	public <T> void updateUIData(T t) {
+		
+	}
+	
+	@SuppressWarnings("serial")
+	public class CachUnitPanel extends JPanel implements ActionListener {
+
+		JButton loadRequestButton;
+		JButton showStatisticsButton;
+		
+		JLabel capacityLabel;
+		JLabel algorithmLabel;
+		JLabel numberOfRequestsLabel;
+		JLabel numberOfDMRequestsLabel;
+		JLabel numberOfDMSwapsLabel;
+		
+		JLabel capacityLabelNumber;
+		JLabel algorithmLabelNumber;
+		JLabel numberOfRequestsLabelNumber;
+		JLabel numberOfDMRequestsLabelNumber;
+		JLabel numberOfDMSwapsLabelNumber;
+		
+		public CachUnitPanel() {
+			loadRequestButton = new JButton("Load a Request");
+			showStatisticsButton = new JButton("Show Statistics");
+			
+			capacityLabel = new JLabel("Capacity: ");
+			algorithmLabel = new JLabel("Algorithm: ");
+			numberOfRequestsLabel = new JLabel("Total number of requests: ");
+			numberOfDMRequestsLabel = new JLabel("Total number of DataModels (GET/DELETE/UPDATE requests): ");
+			numberOfDMSwapsLabel = new JLabel("Total number of DataModels swaps (from Cache to Disk): ");
+			
+			capacityLabelNumber = new JLabel("0");
+			algorithmLabelNumber = new JLabel("UNKNOWN");
+			numberOfRequestsLabelNumber = new JLabel("0");
+			numberOfDMRequestsLabelNumber = new JLabel("0");
+			numberOfDMSwapsLabelNumber = new JLabel("0");
+			
+			loadRequestButton.setLocation(20, 20);
+			showStatisticsButton.setLocation((int)(loadRequestButton.WIDTH + loadRequestButton.location().getX() + 10), 20);
+			
+			capacityLabel.setLocation(5, (int)(loadRequestButton.HEIGHT + loadRequestButton.location().getY() + 10));
+			capacityLabelNumber.setLocation((int) (capacityLabel.WIDTH + capacityLabel.getLocation().getX() + 5), (int)(loadRequestButton.HEIGHT + loadRequestButton.location().getY() + 10));
+			
+			algorithmLabel.setLocation(5, (int)(capacityLabel.HEIGHT + capacityLabel.location().getY() + 10));
+			algorithmLabelNumber.setLocation((int) (algorithmLabel.WIDTH + algorithmLabel.getLocation().getX() + 5), (int)(capacityLabel.HEIGHT + capacityLabel.location().getY() + 10));
+			
+			numberOfRequestsLabel.setLocation(5, (int)(algorithmLabel.HEIGHT + algorithmLabel.location().getY() + 10));
+			numberOfRequestsLabelNumber.setLocation((int) (numberOfRequestsLabel.WIDTH + numberOfRequestsLabel.getLocation().getX() + 5), (int)(algorithmLabel.HEIGHT + algorithmLabel.location().getY() + 10));
+			
+			numberOfDMRequestsLabel.setLocation(5, (int)(numberOfRequestsLabel.HEIGHT + numberOfRequestsLabel.location().getY() + 10));
+			numberOfDMRequestsLabelNumber.setLocation((int) (numberOfDMRequestsLabel.WIDTH + numberOfDMRequestsLabel.getLocation().getX() + 5), (int)(numberOfRequestsLabel.HEIGHT + numberOfRequestsLabel.location().getY() + 10));
+			
+			numberOfDMSwapsLabel.setLocation(5, (int)(numberOfDMRequestsLabel.HEIGHT + numberOfDMRequestsLabel.location().getY() + 10));
+			numberOfDMSwapsLabelNumber.setLocation((int) (numberOfDMSwapsLabel.WIDTH + numberOfDMSwapsLabel.getLocation().getX() + 5), (int)(numberOfDMRequestsLabel.HEIGHT + numberOfDMRequestsLabel.location().getY() + 10));
+			
+			add(loadRequestButton);
+			add(showStatisticsButton);
+			
+			add(capacityLabel);
+			add(capacityLabelNumber);
+			
+			add(algorithmLabel);
+			add(algorithmLabelNumber);
+			
+			add(numberOfRequestsLabel);
+			add(numberOfRequestsLabelNumber);
+			
+			add(numberOfDMRequestsLabel);
+			add(numberOfDMRequestsLabelNumber);
+			
+			add(numberOfDMSwapsLabel);
+			add(numberOfDMSwapsLabelNumber);
+			
+			loadRequestButton.setActionCommand("loadRequestButton");
+			showStatisticsButton.setActionCommand("showStatisticsButton");
+			
+			loadRequestButton.addActionListener(this);
+			showStatisticsButton.addActionListener(this);
+		}
+		
+		public void increaseCapacityLabelNumber() {
+			Integer num = Integer.parseInt(capacityLabelNumber.getText());
+			num++;
+			capacityLabelNumber.setText(num.toString());
+		}
+		
+		public void increaseAlgorithmLabelNumber() {
+			Integer num = Integer.parseInt(algorithmLabelNumber.getText());
+			num++;
+			algorithmLabelNumber.setText(num.toString());
+		}
+		
+		public void increaseNumberOfRequestsLabelNumber() {
+			Integer num = Integer.parseInt(numberOfRequestsLabelNumber.getText());
+			num++;
+			numberOfRequestsLabelNumber.setText(num.toString());
+		}
+		
+		public void increaseNumberOfDMRequestsLabelNumber() {
+			Integer num = Integer.parseInt(numberOfDMRequestsLabelNumber.getText());
+			num++;
+			numberOfDMRequestsLabelNumber.setText(num.toString());
+		}
+		
+		public void increaseNumberOfDMSwapsLabelNumber() {
+			Integer num = Integer.parseInt(numberOfDMSwapsLabelNumber.getText());
+			num++;
+			numberOfDMSwapsLabelNumber.setText(num.toString());
+		}
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			if("showStatisticsButton".equals(e.getActionCommand())) {
+				
+				//setChanged();
+				//notifyObservers("showStatisticsButton");	
+			}
+			else if("loadRequestButton".equals(e.getActionCommand())) {
+				
+				//load json file and show to the client status : Succeeded, Failed
+				
+				//setChanged();
+				//notifyObservers("loadRequestButton");	
+			}
+		}
+	}
+}

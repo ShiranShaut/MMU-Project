@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Extract local variable &apos;scanner&apos; from expression &apos;‪new Scanner(m_Socket.getInputStream())‬&apos;&#x0D;&#x0A;- Original project: &apos;CacheUnitProject&apos;&#x0D;&#x0A;- Variable name: &apos;scanner&apos;&#x0D;&#x0A;- Destination method: &apos;‪com.hit.server.HandleRequest.run()‬&apos;&#x0D;&#x0A;- Variable expression: &apos;‪new Scanner(m_Socket.getInputStream())‬&apos;&#x0D;&#x0A;- Replace occurrences of expression with variable" description="Extract local variable &apos;scanner&apos;" final="false" id="org.eclipse.jdt.ui.extract.temp" input="/src\/main\/java&lt;com.hit.server{HandleRequest.java" name="scanner" replace="true" selection="654 38" stamp="1525422330075" version="1.0"/>
+</session>

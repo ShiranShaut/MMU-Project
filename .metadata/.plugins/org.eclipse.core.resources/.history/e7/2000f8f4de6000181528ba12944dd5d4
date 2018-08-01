@@ -1,0 +1,288 @@
+package com.hit.view;
+
+import java.util.Observable;
+
+import javax.swing.JButton;
+import javax.swing.JFileChooser;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+
+import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+public class CacheUnitView extends Observable implements View {
+
+	CachUnitPanel cacheUnitPanel; 
+	
+	@Override
+	public void start() {
+		javax.swing.SwingUtilities.invokeLater(new Runnable() {
+			public void run() {
+				createAndShowGUI();
+			}
+		});
+	}
+
+	private void createAndShowGUI() {
+		JFrame frame = new JFrame("Java Project - Shiran Shaut_308018969");
+		cacheUnitPanel = new CachUnitPanel();
+		
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.getContentPane().add(cacheUnitPanel);
+		frame.pack();
+		frame.setVisible(true);
+	}
+
+	@Override
+	public <T> void updateUIData(T t) {
+		cacheUnitPanel.SetStatistics((String[])t);
+	}
+	
+	@SuppressWarnings("serial")
+	public class CachUnitPanel extends JPanel implements ActionListener {
+
+		private ButtonsPanel buttonsPanel;
+		private TextPanel textPanel;
+		
+		public CachUnitPanel() {
+			textPanel = new TextPanel();
+			buttonsPanel = new ButtonsPanel(textPanel);
+			
+			this.setPreferredSize(new Dimension(500,300));
+			
+			add(buttonsPanel);
+			add(textPanel);
+		}
+
+		public void SetStatistics(String[] values) {
+			textPanel.setText("ShowStatistics", values);
+		}
+		
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			
+		}
+	}
+
+	public class ButtonsPanel extends JPanel implements ActionListener {
+		
+		TextPanel textPanel;
+		JButton loadRequestButton;
+		JButton showStatisticsButton;
+		
+		public ButtonsPanel(TextPanel textPanel) {
+			this.textPanel = textPanel;
+			
+			loadRequestButton = new JButton("Load a Request");
+			showStatisticsButton = new JButton("Show Statistics");
+			
+			loadRequestButton.setPreferredSize(new Dimension(220,50));
+			showStatisticsButton.setPreferredSize(new Dimension(200,50));
+			
+			loadRequestButton.setActionCommand("loadRequestButton");
+			showStatisticsButton.setActionCommand("showStatisticsButton");
+			
+			loadRequestButton.addActionListener(this);
+			showStatisticsButton.addActionListener(this);
+			
+			add(loadRequestButton);
+			add(showStatisticsButton);
+		}
+		
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			if("showStatisticsButton".equals(e.getActionCommand())) {
+				setChanged();
+				notifyObservers("showStatistics");	
+			}
+			else if("loadRequestButton".equals(e.getActionCommand())) {
+				
+				JFileChooser fileChooser = new JFileChooser();
+				int val = fileChooser.showOpenDialog(ButtonsPanel.this);
+				
+				if(val == JFileChooser.APPROVE_OPTION) {
+					String fileName = fileChooser.getSelectedFile().getPath();
+					
+					if(fileName != null) {
+						textPanel.setText("FileLoaded", new String[] {"true"});
+						setChanged();
+						notifyObservers(fileName);
+					}
+					else {
+						textPanel.setText("FileLoaded", new String[] {"false"});
+					}
+				}
+				else {
+					textPanel.setText("FileLoaded", new String[] {"false"});
+				}
+			}
+		}
+	}
+	
+	public class TextPanel extends JPanel implements ActionListener {
+		
+		JLabel FileLoaded;
+		
+		JLabel capacityLabel;
+		JLabel algorithmLabel;
+		JLabel numberOfRequestsLabel;
+		JLabel numberOfDMRequestsLabel;
+		JLabel numberOfDMSwapsLabel;
+		
+		JLabel capacityLabelNumber;
+		JLabel algorithmLabelNumber;
+		JLabel numberOfRequestsLabelNumber;
+		JLabel numberOfDMRequestsLabelNumber;
+		JLabel numberOfDMSwapsLabelNumber;
+		
+		public TextPanel() {
+			this.setLayout(null);
+			FileLoaded = new JLabel("File Loaded: ");
+			
+			capacityLabel = new JLabel("Capacity: ");
+			algorithmLabel = new JLabel("Algorithm: ");
+			numberOfRequestsLabel = new JLabel("Total number of requests: ");
+			numberOfDMRequestsLabel = new JLabel("Total number of DataModels (GET/DELETE/UPDATE requests): ");
+			numberOfDMSwapsLabel = new JLabel("Total number of DataModels swaps (from Cache to Disk): ");
+			
+			capacityLabelNumber = new JLabel("0");
+			algorithmLabelNumber = new JLabel("UNKNOWN");
+			numberOfRequestsLabelNumber = new JLabel("0");
+			numberOfDMRequestsLabelNumber = new JLabel("0");
+			numberOfDMSwapsLabelNumber = new JLabel("0");
+			
+			FileLoaded.setBounds(5,10,50,50);
+			
+			capacityLabel.setBounds(5, 10, 50, 50);
+			capacityLabelNumber.setBounds((int)(capacityLabel.getWidth() + capacityLabel.getLocation().getX() + 5), 10, 50, 50);
+			
+			algorithmLabel.setBounds(5, (int)(capacityLabel.getHeight() + capacityLabel.location().getY() + 10), 50, 50);
+			algorithmLabelNumber.setBounds((int) (algorithmLabel.getWidth() + algorithmLabel.getLocation().getX() + 5), (int)(capacityLabel.getHeight() + capacityLabel.location().getY() + 10), 50, 50);
+			
+			numberOfRequestsLabel.setBounds(5, (int)(algorithmLabel.getHeight() + algorithmLabel.location().getY() + 10), 50, 50);
+			numberOfRequestsLabelNumber.setBounds((int) (numberOfRequestsLabel.getWidth() + numberOfRequestsLabel.getLocation().getX() + 5), (int)(algorithmLabel.getHeight() + algorithmLabel.location().getY() + 10), 50, 50);
+			
+			numberOfDMRequestsLabel.setBounds(5, (int)(numberOfRequestsLabel.getHeight() + numberOfRequestsLabel.location().getY() + 10), 50, 50);
+			numberOfDMRequestsLabelNumber.setBounds((int) (numberOfDMRequestsLabel.getWidth() + numberOfDMRequestsLabel.getLocation().getX() + 5), (int)(numberOfRequestsLabel.getHeight() + numberOfRequestsLabel.location().getY() + 10), 50, 50);
+			
+			numberOfDMSwapsLabel.setBounds(5, (int)(numberOfDMRequestsLabel.getHeight() + numberOfDMRequestsLabel.location().getY() + 10), 50, 50);
+			numberOfDMSwapsLabelNumber.setBounds((int) (numberOfDMSwapsLabel.getWidth() + numberOfDMSwapsLabel.getLocation().getX() + 5), (int)(numberOfDMRequestsLabel.getHeight() + numberOfDMRequestsLabel.location().getY() + 10), 50, 50);
+			
+			add(FileLoaded);
+			add(capacityLabel);
+			add(capacityLabelNumber);
+			
+			add(algorithmLabel);
+			add(algorithmLabelNumber);
+			
+			add(numberOfRequestsLabel);
+			add(numberOfRequestsLabelNumber);
+			
+			add(numberOfDMRequestsLabel);
+			add(numberOfDMRequestsLabelNumber);
+			
+			add(numberOfDMSwapsLabel);
+			add(numberOfDMSwapsLabelNumber);
+
+			setAllLabelsToNotVisible();
+		}
+
+		private void setAllLabelsToNotVisible() {
+
+			FileLoaded.setVisible(false);
+
+			capacityLabel.setVisible(false);
+			capacityLabelNumber.setVisible(false);
+			algorithmLabel.setVisible(false);
+			algorithmLabelNumber.setVisible(false);
+			numberOfRequestsLabel.setVisible(false);
+			numberOfRequestsLabelNumber.setVisible(false);
+			numberOfDMRequestsLabel.setVisible(false);
+			numberOfDMRequestsLabelNumber.setVisible(false);
+			numberOfDMSwapsLabel.setVisible(false);
+			numberOfDMSwapsLabelNumber.setVisible(false);
+		}
+
+		private void setFileLoadedText() {
+
+			FileLoaded.setVisible(true);
+
+			capacityLabel.setVisible(false);
+			capacityLabelNumber.setVisible(false);
+			algorithmLabel.setVisible(false);
+			algorithmLabelNumber.setVisible(false);
+			numberOfRequestsLabel.setVisible(false);
+			numberOfRequestsLabelNumber.setVisible(false);
+			numberOfDMRequestsLabel.setVisible(false);
+			numberOfDMRequestsLabelNumber.setVisible(false);
+			numberOfDMSwapsLabel.setVisible(false);
+			numberOfDMSwapsLabelNumber.setVisible(false);
+		}
+
+		private void setStatisticsText() {
+
+			FileLoaded.setVisible(false);
+
+			capacityLabel.setVisible(true);
+			capacityLabelNumber.setVisible(true);
+			algorithmLabel.setVisible(true);
+			algorithmLabelNumber.setVisible(true);
+			numberOfRequestsLabel.setVisible(true);
+			numberOfRequestsLabelNumber.setVisible(true);
+			numberOfDMRequestsLabel.setVisible(true);
+			numberOfDMRequestsLabelNumber.setVisible(true);
+			numberOfDMSwapsLabel.setVisible(true);
+			numberOfDMSwapsLabelNumber.setVisible(true);
+		}
+
+		public void setText(String text, String[] values) {
+			if (text.equals("FileLoaded")) {
+				setFileLoadedText();
+				setFileLoadedValue(Boolean.parseBoolean(values[0]));
+			} else if(text.equals("ShowStatistics")){
+				setStatisticsText();
+				setCapacityLabelNumber(values[0]);
+				setAlgorithmLabel(values[1]);
+				setNumberOfRequestsLabelNumber(values[2]);
+				setNumberOfDMRequestsLabelNumber(values[3]);
+				setNumberOfDMSwapsLabelNumber(values[4]);
+			}
+		}
+		
+		public void setFileLoadedValue(Boolean val) {
+			if(val) {
+				FileLoaded.setText("File Load Succeeded");
+			}
+			else {
+				FileLoaded.setText("File Load Failed");
+			}
+		}
+		
+		public void setCapacityLabelNumber(String num) {
+			capacityLabelNumber.setText(num);
+		}
+		
+		public void setAlgorithmLabel(String chosenAlgo) {
+			algorithmLabelNumber.setText(chosenAlgo);
+		}
+		
+		public void setNumberOfRequestsLabelNumber(String num) {
+			numberOfRequestsLabelNumber.setText(num);
+		}
+		
+		public void setNumberOfDMRequestsLabelNumber(String num) {
+			numberOfDMRequestsLabelNumber.setText(num);
+		}
+		
+		public void setNumberOfDMSwapsLabelNumber(String num) {
+			numberOfDMSwapsLabelNumber.setText(num);
+		}
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			
+		}
+	}
+}

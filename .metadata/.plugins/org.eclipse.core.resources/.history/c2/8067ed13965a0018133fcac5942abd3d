@@ -1,0 +1,53 @@
+package com.hit.view;
+
+import java.util.Observable;
+
+import javax.swing.JButton;
+import javax.swing.JPanel;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+public class CacheUnitView extends Observable implements View {
+
+	@Override
+	public void start() {
+		
+	}
+
+	@Override
+	public <T> void updateUIData(T t) {
+		
+	}
+	
+	@SuppressWarnings("serial")
+	public class CachUnitPanel extends JPanel implements ActionListener {
+
+		JButton loadRequestButton;
+		JButton showStatisticsButton;
+		
+		public CachUnitPanel() {
+			loadRequestButton = new JButton("Load a Request");
+			showStatisticsButton = new JButton("Show Statistics");
+			
+			add(loadRequestButton);
+			add(showStatisticsButton);
+			loadRequestButton.setActionCommand("loadRequestButton");
+			showStatisticsButton.setActionCommand("showStatisticsButton");
+			loadRequestButton.addActionListener(this);
+			showStatisticsButton.addActionListener(this);
+		}
+		
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			if("showStatisticsButton".equals(e.getActionCommand())) {
+				setChanged();
+				notifyObservers();	
+			}
+			else if("loadRequestButton".equals(e.getActionCommand())) {
+				setChanged();
+				notifyObservers();	
+			}
+		}
+	}
+	
+}
